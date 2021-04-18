@@ -574,7 +574,8 @@ INSERT IGNORE INTO CountyDemographic (
     INNER JOIN State ON State.abbreviation = a.state
     INNER JOIN County ON County.name = a.county AND County.state_ID = State.ID
 );
-
+alter table CountyDemographic change column pecent_poverty percent_poverty decimal(4,2);
+alter table CountyDemographic change column pecent_child_poverty percent_child_poverty decimal(4,2);
 
 -- ************************************************************************************
 -- Tweets *****************************************************************************
