@@ -1,7 +1,6 @@
 -- Select database
 -- use project_26;
 
-/*
 select 'Tweets for Trump from Top 10 Non-US Countries';
 with TweetDT_Distinct as (
 		select distinct * from Tweet
@@ -76,10 +75,11 @@ group by country
 order by Portion desc
 limit 10
 ;
-*/
 
 -- 1. Removed tweets that mentioned both president candidates
 -- 2. Assumed tweets that mentioned a single candidate are inclined to that candidate
+
+-- We observed that the prediction is bad (50% accuracy) when based solely on region tweet count (w/o sentiment analysis)
 with Tweet_Distinct as (
 		select distinct * from Tweet
 	),
@@ -137,56 +137,8 @@ with Tweet_Distinct as (
 	)
 select
 	state,
-	if(NormBiden > NormTrump, 'YES', 'NO') as 'BidenWon',
+	if(NormBiden > NormTrump, 'YES', 'NO') as 'Prediction-BidenWon',
 	NormBiden,
 	NormTrump
 from NormalizedTweetTotal
 ;
-
-/*
--- We notice that when country='United States', there is no 'state' info.
-select 'Tweets for Trump By US States';
-with Tweet_Distinct as (
-		select distinct * from Tweet
-	),
-	ValidTweet as (
-		select * from Tweet_Distinct 
-			where created_at<>'0000-00-00 00:00:00' and country is not NULL
-	),
-	ValidTweetTrump_USA as (
-		select * from ValidTweet
-			where country='United States of America' and state is not NULL
-	)
-select 
-	state,
-	count(state)*100/(select count(*) from ValidTweetTrump_USA) as Portion,
-	count(state) as 'TweetsByState',
-	(select count(*) from ValidTweetTrump_USA) as 'TotalTweets'
-from ValidTweetTrump_USA
-group by state
-order by Portion desc
-;
-
-select 'Tweets for Biden By US States';
-with Tweet_Distinct as (
-		select distinct * from Tweet
-	),
-	ValidTweet as (
-		select * from Tweet_Distinct 
-			where created_at<>'0000-00-00 00:00:00' and country is not NULL
-	),
-	ValidTweetBiden_USA as (
-		select * from ValidTweet
-			where country='United States of America' and state is not NULL
-	)
-select 
-	state,
-	count(state)*100/(select count(*) from ValidTweetBiden_USA) as Portion,
-	count(state) as 'TweetsByState',
-	(select count(*) from ValidTweetBiden_USA) as 'TotalTweets'
-from ValidTweetBiden_USA
-group by state
-order by Portion desc
-;
-*/
-
