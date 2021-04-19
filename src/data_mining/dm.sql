@@ -1,6 +1,7 @@
 -- Select database
 -- use project_26;
 
+/*
 select 'Tweets for Trump from Top 10 Non-US Countries';
 with TweetDT_Distinct as (
 		select distinct * from Tweet
@@ -80,6 +81,7 @@ limit 10
 -- 2. Assumed tweets that mentioned a single candidate are inclined to that candidate
 
 -- We observed that the prediction is bad (50% accuracy) when based solely on region tweet count (w/o sentiment analysis)
+*/
 with Tweet_Distinct as (
 		select distinct * from Tweet
 	),
@@ -116,29 +118,34 @@ with Tweet_Distinct as (
 	),
 	TweetPercent as (
 		select
-			min(PercentBiden) as MinBiden, max(PercentBiden) as MaxBiden,
-			min(PercentTrump) as MinTrump, max(PercentTrump) as MaxTrump,
+			min(PercentBiden)-0.0001 as MinBiden, max(PercentBiden)+0.0001 as MaxBiden,
+			min(PercentTrump)-0.0001 as MinTrump, max(PercentTrump)+0.0001 as MaxTrump,
 			sum(PercentBiden) as SumBiden, sum(PercentTrump) as sumTrump
 		from TweetTotal
 	),
---	NormalizedTweetTotal as (
---		select
---			TweetTotal.state,
---			(PercentBiden-TweetPercent.MinBiden)/(TweetPercent.MaxBiden-TweetPercent.MinBiden) as 'NormBiden',
---			(PercentTrump-TweetPercent.MinTrump)/(TweetPercent.MaxTrump-TweetPercent.MinTrump) as 'NormTrump'
---		from TweetTotal, TweetPercent
---	)
-	NormalizedTweetTotal as (
+	NormalizedTweetTotal1 as (
+		select
+			TweetTotal.state,
+			(PercentBiden-TweetPercent.MinBiden)/(TweetPercent.MaxBiden-TweetPercent.MinBiden) as 'NormBiden',
+			(PercentTrump-TweetPercent.MinTrump)/(TweetPercent.MaxTrump-TweetPercent.MinTrump) as 'NormTrump'
+		from TweetTotal, TweetPercent
+	),
+	NormalizedTweetTotal2 as (
 		select
 			TweetTotal.state,
 			PercentBiden/TweetPercent.SumBiden as 'NormBiden',
 			PercentTrump/TweetPercent.SumTrump as 'NormTrump'
 		from TweetTotal, TweetPercent
+	),
+	Benchmark as (
+		select * from ASR
 	)
 select
 	state,
-	if(NormBiden > NormTrump, 'YES', 'NO') as 'Prediction-BidenWon',
-	NormBiden,
-	NormTrump
-from NormalizedTweetTotal
+	c.name as 'ActualWinner',
+	if(NormBiden > NormTrump, 'Joe Biden', 'Donald Trump') as 'Winner'
+--	NormBiden, NormTrump
+from NormalizedTweetTotal2 a
+inner join Benchmark b on b.name=a.state
+inner join Candidate c on c.ID = b.candidate_ID
 ;
