@@ -1,7 +1,6 @@
 -- Select database
 -- use project_26;
 
-/*
 select 'Tweets for Trump from Top 10 Non-US Countries';
 with TweetDT_Distinct as (
 		select distinct * from Tweet
@@ -81,7 +80,6 @@ limit 10
 -- 2. Assumed tweets that mentioned a single candidate are inclined to that candidate
 
 -- We observed that the prediction is bad (50% accuracy) when based solely on region tweet count (w/o sentiment analysis)
-*/
 with Tweet_Distinct as (
 		select distinct * from Tweet
 	),
