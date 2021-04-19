@@ -63,8 +63,16 @@ with SD as (
 			(PctCovid+PctCovidDeath)*0.81
 			as 'BidenScore'
 		from SDCovid
+	),
+	Benchmark as (
+		select * from ASR
 	)
-select if(TrumpScore > BidenScore, 'Donald Trump', 'Joe Biden') as 'Winner', TrumpScore, BidenScore
-from CandidateScores
+select
+	state,
+	c.name as 'ActualWinner',
+	if(TrumpScore > BidenScore, 'Donald Trump', 'Joe Biden') as 'Winner',
+	TrumpScore, BidenScore
+from CandidateScores a
+inner join Benchmark b on b.name=a.state
+inner join Candidate c on c.ID=b.candidate_ID
 ;
-

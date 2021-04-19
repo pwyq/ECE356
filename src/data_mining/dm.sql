@@ -145,5 +145,5 @@ select
 --	NormBiden, NormTrump
 from NormalizedTweetTotal2 a
 inner join Benchmark b on b.name=a.state
-inner join Candidate c on c.ID = b.candidate_ID
+inner join Candidate c on c.ID=b.candidate_ID
 ;
