@@ -418,7 +418,7 @@ UPDATE County SET name=RTRIM(REVERSE(SUBSTRING(REVERSE(name),LOCATE(" ",REVERSE(
 
 -- Finally, insert the data into County result.
 -- First for 2016
-INSERT IGNORE INTO CountyResult(county_ID, year, fraction_vote_dem, fraction_vote_rep, fraction_vote_other, winner_ID) (
+INSERT IGNORE INTO CountyResult(county_ID, year, fraction_vote_rep, fraction_vote_dem, fraction_vote_other, winner_ID) (
 	SELECT county_ID, 
     2016,
     fraction16_Donald_Trump, 
@@ -438,7 +438,7 @@ INSERT IGNORE INTO CountyResult(county_ID, year, fraction_vote_dem, fraction_vot
 );
 
 -- Then for 2020. Here we can use the _PresidentCountyCandidate data from Kaggle
-INSERT IGNORE INTO CountyResult(county_ID, year, fraction_vote_dem, fraction_vote_rep, fraction_vote_other, winner_ID) (
+INSERT IGNORE INTO CountyResult(county_ID, year, fraction_vote_rep, fraction_vote_dem, fraction_vote_other, winner_ID) (
 	SELECT county_ID, 2020, 
     fraction20_Donald_Trump, 
     fraction20_Joe_Biden, 
@@ -461,6 +461,60 @@ INSERT IGNORE INTO CountyResult(county_ID, year, fraction_vote_dem, fraction_vot
 );
 
 -- Issue with _PresidentCountyCandidate is that all the Alaska counties are entered as "ED 10", "ED 11", etc. Which are not real county names...
+
+-- We also want to make sure that fraction columns are less than or equal to 1
+ALTER TABLE CountyResult ADD CONSTRAINT CHECK(
+	fraction_vote_dem <= 1
+);
+ALTER TABLE CountyResult ADD CONSTRAINT CHECK(
+	fraction_vote_rep <= 1
+);
+ALTER TABLE CountyResult ADD CONSTRAINT CHECK(
+	fraction_vote_other <= 1
+);
+
+-- The fraction vote_other column should always be the result of 1 - fraction_vote_dem - fraction_vote_rep
+ALTER TABLE CountyResult ADD CONSTRAINT CHECK(
+	fraction_vote_other = 1 - fraction_vote_dem - fraction_vote_rep
+);
+
+-- Add a column to keep track of total votes
+ALTER TABLE CountyResult ADD COLUMN total_votes INT;
+-- Add a check to this column
+ALTER TABLE CountyResult ADD CONSTRAINT CHECK(
+	total_votes >= 0
+);
+
+-- Add the total votes for the year 2016 for each county
+UPDATE
+  CountyResult AS C
+  INNER JOIN (
+    SELECT County.ID AS county_ID, total_votes16
+    FROM County
+    INNER JOIN State
+    ON County.state_ID = State.ID
+    INNER JOIN _CountyStatistics ON 
+    _CountyStatistics.county = County.name AND
+    _CountyStatistics.state = State.abbreviation
+  ) AS A ON A.county_ID = C.county_ID
+SET C.total_votes = A.total_votes16 
+WHERE C.year = 2016;
+ 
+-- Do the same for the 2020 election year
+UPDATE
+  CountyResult AS C
+  INNER JOIN (
+    SELECT County.ID AS county_ID, total_votes20
+    FROM County
+    INNER JOIN State
+    ON County.state_ID = State.ID
+    INNER JOIN _CountyStatistics ON 
+    _CountyStatistics.county = County.name AND
+    _CountyStatistics.state = State.abbreviation
+  ) AS A ON A.county_ID = C.county_ID
+SET C.total_votes = A.total_votes20
+WHERE C.year = 2020;
+
 
 -- ************************************************************************************
 -- State Result ***********************************************************************
@@ -679,3 +733,14 @@ UPDATE Tweet SET country=NULL WHERE country='';
 UPDATE Tweet SET continent=NULL WHERE continent='';
 UPDATE Tweet SET state=NULL WHERE state='';
 UPDATE Tweet SET state_code=NULL WHERE state_code='';
+
+
+
+-- ************************************************************************************
+-- Indexes ****************************************************************************
+-- ************************************************************************************
+
+-- Some indexes for query performance improvement.
+CREATE INDEX tweet_country_state_idx ON Tweet (country, state);
+CREATE INDEX candidate_partyabbr_idx ON Candidate (abbreviation);
+CREATE INDEX county_name_idx ON County (name);
