@@ -1,9 +1,9 @@
 CREATE TABLE FIPSCode(
-	fips INT NOT NULL,
-	name VARCHAR(50) NOT NULL,
-	state CHAR(2) NOT NULL,
-	-- key constraint
-	PRIMARY KEY (fips)
+    fips INT NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    state CHAR(2) NOT NULL,
+    -- key constraint
+    PRIMARY KEY (fips)
 );
 INSERT INTO FIPSCode (fips, name, state) VALUES
 (0,'UNITED STATES','NA'),

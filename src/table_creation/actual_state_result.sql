@@ -1,6 +1,6 @@
 CREATE TABLE ASR (
-	name VARCHAR(50) NOT NULL,
-	candidate_ID INT NOT NULL
+    name VARCHAR(50) NOT NULL,
+    candidate_ID INT NOT NULL
 );
 INSERT INTO ASR (name, candidate_ID) VALUES
 ('Alabama', 2),
