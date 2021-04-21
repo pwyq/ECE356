@@ -1,21 +1,33 @@
 # ECE356
 
 ## Running the Client App
-1. 
-```
+
+Following instructions are for Linux/macOS.
+
+1. Connect to UWaterloo Network (VPN etc).
+
+2. 
+
 > cd ClientApp
-```
-2. Create a python3 virtual environment and source it
-```
+
+3. Create a python3 virtual environment and source it
+
 > python3 -m venv ./venv>
 > source ./venv/bin/activate
-```
 
-3.
-```
+4. Enter your credentials in `mydb.py`, specifically the `user` and `password` field in the `database` variable.
+
+5.
+
 > pip3 install -r requirements.txt
 > python3 main.py
-```
+
+
+## Running tests
+
+> cd ClientApp
+> python3 -m unittest unit_tests
+
 ## Datasets
 
 1. Prof: No need to use all indicated datasets
@@ -29,11 +41,3 @@
 - Possibly useful [US County Social Health](https://www.kaggle.com/johnjdavisiv/us-counties-covid19-weather-sociohealth-data?select=us_county_sociohealth_data.csv) 5MB
 
 - (Addresses will be needed for tying tweet source to voting county) [Debate data](https://www.kaggle.com/headsortails/us-election-2020-presidential-debates) (ignore the .mp3 files)
-
-
-## Running tests
-```
-> cd ClientApp
-> python3 -m unittest unit_tests
-```
-
