@@ -15,7 +15,7 @@ Following instructions are for Linux/macOS.
 3. Create a python3 virtual environment and source it
 
 ```
-> python3 -m venv ./venv>
+> python3 -m venv ./venv
 > source ./venv/bin/activate
 ```
 
