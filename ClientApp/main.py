@@ -11,19 +11,19 @@ def init_db():
 
 
 def show_distinct_counties():
-    counties = my_db.County.select(my_db.County.name)
+    counties = my_db.County.select(my_db.County.name).distinct()
     print("Here are all the counties we have statistics on:")
     print(tabulate(counties.dicts(), headers="keys"))
 
 
 def show_distinct_states():
-    states = my_db.State.select(my_db.State.name)
+    states = my_db.State.select(my_db.State.name).distinct()
     print("Here are all the States we have statistics on:")
     print(tabulate(states.dicts(), headers="keys"))
 
 
 def show_distinct_candidates():
-    candidates = my_db.Candidate.select(my_db.Candidate.name)
+    candidates = my_db.Candidate.select(my_db.Candidate.name).distinct()
     print("Here are all the Candidates we have statistics on:")
     print(tabulate(candidates.dicts(), headers="keys"))
 
@@ -267,7 +267,7 @@ def get_county_stats_with_demographics():
             valid_name = get_input_as_int("If you don't know any valid county names please enter 1 else 0: ")
             if valid_name == 1:
                 show_distinct_counties()
-            county_name = get_input_as_int("Please enter a valid county name: ")
+            county_name = get_input_as_str("Please enter a valid county name: ")
             del filters[val]
         elif val == 0:
             return
@@ -322,6 +322,7 @@ def show_main_menu_options():
     print("8) Show all candidates")
     print("9) Show all parties")
     print("10) Add annotations")
+    print("11) Get annotations")
     print("0) Exit the program")
 
 
@@ -361,6 +362,23 @@ def insert_annotation(state, county, annotation):
     result = my_db.Annotations.insert(user_id=user_name, state=state, county=county, annotation=annotation).execute()
     if result == 0:
         print("Successfully added the annotations! \n")
+
+
+def show_annotations():
+    option = 0
+    state = ''
+    county = ''
+    option = get_input_as_int("Would you like to specify a state? 1 for yes and 0 for no: ")
+
+    if option == 1:
+        state = get_input_as_str("Enter the state: ")
+
+    option = get_input_as_int("Would you like to specify a county? 1 for yes and 0 for no: ")
+
+    if option == 1:
+        county = get_input_as_str("Enter the county: ")
+
+    get_annotations(state, county)
 
 
 def get_annotations(state='', county=''):
@@ -429,5 +447,7 @@ if __name__ == '__main__':
             show_distinct_parties()
         elif input_val == 10:
             add_annotations()
+        elif input_val == 11:
+            show_annotations()
         elif input_val == 0:
             break
