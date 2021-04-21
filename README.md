@@ -5,11 +5,16 @@
 ```
 > cd ClientApp
 ```
-2. [Optional] Create a python3 virtual environment and `source <venv>/bin/activate`
+2. Create a python3 virtual environment and source it
+```
+> python3 -m venv ./venv>
+> source ./venv/bin/activate
+```
+
 3.
 ```
-> pip3 install -r requirements.txt
-> python3 main.py
+> pip install -r requirements.txt
+> python main.py
 ```
 ## Datasets
 
