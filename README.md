@@ -1,5 +1,16 @@
 # ECE356
 
+## Running the Client App
+1. 
+```
+> cd ClientApp
+```
+2. [Optional] Create a python3 virtual environment and `source <venv>/bin/activate`
+3.
+```
+> pip3 install -r requirements.txt
+> python3 main.py
+```
 ## Datasets
 
 1. Prof: No need to use all indicated datasets
@@ -20,3 +31,4 @@
 > cd ClientApp
 > python3 -m unittest unit_tests
 ```
+
