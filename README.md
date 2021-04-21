@@ -8,26 +8,32 @@ Following instructions are for Linux/macOS.
 
 2. 
 
+```
 > cd ClientApp
+```
 
 3. Create a python3 virtual environment and source it
 
+```
 > python3 -m venv ./venv>
 > source ./venv/bin/activate
+```
 
 4. Enter your credentials in `mydb.py`, specifically the `user` and `password` field in the `database` variable.
 
 5.
 
+```
 > pip3 install -r requirements.txt
 > python3 main.py
-
+```
 
 ## Running tests
 
+```
 > cd ClientApp
 > python3 -m unittest unit_tests
-
+```
 
 ## Datasets
 
