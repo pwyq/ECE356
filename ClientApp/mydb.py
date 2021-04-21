@@ -1,8 +1,8 @@
 from peewee import *
 
 database = MySQLDatabase('project_26', **{'charset': 'utf8', 'sql_mode': 'PIPES_AS_CONCAT', 'use_unicode': True,
-                                          'host': 'marmoset04.shoshin.uwaterloo.ca', 'user': 'user',
-                                          'password': 'password'})
+                                          'host': 'marmoset04.shoshin.uwaterloo.ca', 'user': 'm2jha',
+                                          'password': 'Mikethestrom!2'})
 
 
 class UnknownField(object):
@@ -232,5 +232,16 @@ class PresidentState(BaseModel):
 
     class Meta:
         table_name = '_PresidentState'
+        primary_key = False
+
+
+class Annotations(BaseModel):
+    user_id = CharField()
+    state = CharField()
+    county = CharField()
+    annotation = TextField()
+
+    class Meta:
+        table_name = 'annotations'
         primary_key = False
 

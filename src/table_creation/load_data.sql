@@ -673,6 +673,12 @@ INSERT INTO Tweet (created_at, city, country, continent, state, state_code, hash
     ) joined
 );
 
+
+-- Create Annotations table
+CREATE TABLE annotations (user_id VARCHAR(255), county VARCHAR(100),
+       state VARCHAR(100), annotation TEXT);
+
+
 -- Update missing information (set to NULL so that it's clear, and so we can mine on this data properly)
 UPDATE Tweet SET city=NULL WHERE city='';
 UPDATE Tweet SET country=NULL WHERE country='';
