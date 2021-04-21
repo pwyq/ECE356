@@ -13,3 +13,10 @@
 - Possibly useful [US County Social Health](https://www.kaggle.com/johnjdavisiv/us-counties-covid19-weather-sociohealth-data?select=us_county_sociohealth_data.csv) 5MB
 
 - (Addresses will be needed for tying tweet source to voting county) [Debate data](https://www.kaggle.com/headsortails/us-election-2020-presidential-debates) (ignore the .mp3 files)
+
+
+## Running tests
+```
+> cd ClientApp
+> python3 -m unittest unit_tests
+```

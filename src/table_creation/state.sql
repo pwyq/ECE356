@@ -1,9 +1,9 @@
 CREATE TABLE State(
-	name VARCHAR(50) NOT NULL,
-	abbreviation CHAR(2) NOT NULL,
-	stateID INT NOT NULL,
-	-- key constraint
-	PRIMARY KEY (stateID)
+    name VARCHAR(50) NOT NULL,
+    abbreviation CHAR(2) NOT NULL,
+    stateID INT NOT NULL,
+    -- key constraint
+    PRIMARY KEY (stateID)
 );
 INSERT INTO State (name, abbreviation, stateID) VALUES
 ('Alabama','AL',1),
