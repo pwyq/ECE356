@@ -47,23 +47,29 @@ def get_county_stats():
         for idx, val in filters.items():
             print(val)
 
-        val = int(input("\n Please enter a value: "))
+        val = get_input_as_int("\n Please enter a value: ")
 
         if val == 1:
-            year = int(input("Enter year to filter by (2020 or 2016): "))
+            year = get_input_as_int("Enter year to filter by (2020 or 2016): ")
             del filters[val]
         elif val == 2:
-            valid_name = str(input("If you don't know any valid county names please enter 1 else 0: "))
+            valid_name = get_input_as_int("If you don't know any valid county names please enter 1 else 0: ")
             if valid_name == 1:
                 show_distinct_counties()
-            county_name = str(input("Please enter a valid county name: "))
+            county_name = get_input_as_str("Please enter a valid county name: ")
             del filters[val]
         elif val == 3:
-            winner_party = str(input("Please enter DEM, REP or ...: "))
+            winner_party = get_input_as_str("Please enter DEM, REP or ...: ")
             del filters[val]
         else:
-            print("ENDED!")
-        keep_going = int(input("Do you want to keep filtering by the remaining options? Please enter 1 or 0: "))
+            print("No valid option selected! Returning to main menu!")
+            return
+
+        keep_going = get_input_as_int("Do you want to keep filtering by the remaining options? Please enter 1 or 0: ")
+
+    if keep_going == -1 or year == -1 or county_name == -1 or winner_party == -1:
+        print("Invalid input! Returning to main menu!")
+        return
 
     if county_name == '':
         results = my_db.CountyResult \
@@ -98,23 +104,28 @@ def get_state_stats():
         for idx, val in filters.items():
             print(val)
 
-        val = int(input("\n Please enter a value: "))
+        val = get_input_as_int("\n Please enter a value: ")
 
         if val == 1:
-            year = int(input("Enter year to filter by (2020 or 2016): "))
+            year = get_input_as_int("Enter year to filter by (2020 or 2016): ")
             del filters[val]
         elif val == 2:
-            valid_name = str(input("If you don't know any valid state names please enter 1 else 0: "))
+            valid_name = get_input_as_int("If you don't know any valid state names please enter 1 else 0: ")
             if valid_name == 1:
                 show_distinct_states()
-            state = str(input("Please enter a valid state: "))
+            state = get_input_as_str("Please enter a valid state: ")
             del filters[val]
         elif val == 3:
-            winner_party = str(input("Please enter DEM, REP or Other: "))
+            winner_party = get_input_as_str("Please enter DEM, REP or Other: ")
             del filters[val]
         else:
-            print("ENDED!")
-        keep_going = int(input("Do you want to keep filtering by the remaining options? Please enter 1 or 0: "))
+            print("No valid option selected! Returning to main menu!")
+            return
+        keep_going = get_input_as_int("Do you want to keep filtering by the remaining options? Please enter 1 or 0: ")
+
+    if keep_going == -1 or year == -1 or state == -1 or winner_party == -1:
+        print("Invalid input! Returning to main menu!")
+        return
 
     if state == '':
         results = my_db.CountyResult \
@@ -146,13 +157,17 @@ def get_county_covid_stats():
         print(val)
 
     county_name = ''
-    val = int(input("\n Please enter a value: "))
+    val = get_input_as_int("\n Please enter a value: ")
 
     if val == 1:
-        valid_name = str(input("If you don't know any valid county names please enter 1 else 0: "))
+        valid_name = get_input_as_str("If you don't know any valid county names please enter 1 else 0: ")
         if valid_name == 1:
             show_distinct_counties()
-        county_name = str(input("Please enter a valid county name: "))
+        county_name = get_input_as_str("Please enter a valid county name: ")
+
+    if county_name == -1:
+        print("Invalid input! Returning to main menu!")
+        return
 
     if county_name == '':
         results = my_db.CountyCovid.select(my_db.CountyCovid.num_cases, my_db.CountyCovid.num_deaths, my_db.County.name) \
@@ -171,14 +186,18 @@ def get_state_covid_stats():
         print(val)
 
     state_name = ''
-    val = int(input("\n Please enter a value: "))
+    val = get_input_as_int("\n Please enter a value: ")
 
     if val == 1:
-        valid_name = str(input("If you don't know any valid state names please enter 1 else 0: "))
+        valid_name = get_input_as_str("If you don't know any valid state names please enter 1 else 0: ")
         if valid_name == 1:
             show_distinct_states()
-        state_name = str(input("Please enter a valid state: "))
+        state_name = get_input_as_str("Please enter a valid state: ")
         del filters[val]
+
+    if state_name == -1:
+        print("Invalid input! Returning to main menu!")
+        return
 
     if state_name == '':
         results = my_db.CountyCovid.select(fn.Sum(my_db.CountyCovid.num_cases), fn.Sum(my_db.CountyCovid.num_deaths),
@@ -218,37 +237,37 @@ def get_county_stats_with_demographics():
         for idx, val in filters.items():
             print(val)
 
-        val = int(input("\n Please enter a value: "))
+        val = get_input_as_int("\n Please enter a value: ")
 
         if val == 1:
-            unemployment_rate = str(input("Enter employment rate to filter by (greater than): "))
+            unemployment_rate = get_input_as_str("Enter employment rate to filter by (greater than): ")
             del filters[val]
         elif val == 2:
-            percent_poverty = str(input("Enter percent poverty to filter by (greater than): "))
+            percent_poverty = get_input_as_str("Enter percent poverty to filter by (greater than): ")
             del filters[val]
         elif val == 3:
-            median_income = str(input("Enter median income to filter by (greater than): "))
+            median_income = get_input_as_str("Enter median income to filter by (greater than): ")
             del filters[val]
         elif val == 4:
-            percent_white = str(input("Enter percent white to filter by (greater than): "))
+            percent_white = get_input_as_str("Enter percent white to filter by (greater than): ")
             del filters[val]
         elif val == 5:
-            percent_black = str(input("Enter percent black to filter by (greater than): "))
+            percent_black = get_input_as_str("Enter percent black to filter by (greater than): ")
             del filters[val]
         elif val == 6:
-            percent_hispanic = str(input("Enter percent hispanic to filter by (greater than): "))
+            percent_hispanic = get_input_as_str("Enter percent hispanic to filter by (greater than): ")
             del filters[val]
         elif val == 7:
-            percent_native = str(input("Enter percent native to filter by (greater than): "))
+            percent_native = get_input_as_str("Enter percent native to filter by (greater than): ")
             del filters[val]
         elif val == 8:
-            percent_asian = str(input("Enter percent asian to filter by (greater than): "))
+            percent_asian = get_input_as_str("Enter percent asian to filter by (greater than): ")
             del filters[val]
         elif val == 9:
-            valid_name = int(input("If you don't know any valid county names please enter 1 else 0: "))
+            valid_name = get_input_as_int("If you don't know any valid county names please enter 1 else 0: ")
             if valid_name == 1:
                 show_distinct_counties()
-            county_name = str(input("Please enter a valid county name: "))
+            county_name = get_input_as_int("Please enter a valid county name: ")
             del filters[val]
         elif val == 0:
             return
@@ -256,6 +275,11 @@ def get_county_stats_with_demographics():
             print("No valid options selected! Returning to main menu")
             return
         keep_going = int(input("Do you want to keep filtering by the remaining options? Please enter 1 or 0: "))
+
+    if keep_going == -1 or county_name == -1 or percent_poverty == -1 or unemployment_rate == -1 or \
+            percent_hispanic == -1 or percent_black == -1 or percent_white == -1 or median_income == -1 or percent_native == -1:
+        print("Invalid input! Returning to main menu!")
+        return
 
     if county_name == '':
         results = my_db.CountyDemographic \
@@ -303,33 +327,33 @@ def show_main_menu_options():
 
 def add_annotations():
     print("Please enter what you'd like to annotate for? State or county or both?")
-    option = int(input("Enter 0 for state, 1 for county and 2 for both:"))
+    option = get_input_as_int("Enter 0 for state, 1 for county and 2 for both:")
     state = ''
     county = ''
     if option == 0:
-        valid_name = str(input("If you don't know any valid state names please enter 1 else 0: "))
+        valid_name = get_input_as_str("If you don't know any valid state names please enter 1 else 0: ")
         if valid_name == 1:
             show_distinct_states()
-        state = str(input("Please enter the state:"))
+        state = get_input_as_str("Please enter the state:")
     elif option == 1:
-        valid_name = str(input("If you don't know any valid county names please enter 1 else 0: "))
+        valid_name = get_input_as_str("If you don't know any valid county names please enter 1 else 0: ")
         if valid_name == 1:
             show_distinct_counties()
-        county = str(input("Please enter the county:"))
+        county = get_input_as_str("Please enter the county:")
     elif option == 2:
-        valid_name = str(input("If you don't know any valid state names please enter 1 else 0: "))
+        valid_name = get_input_as_str("If you don't know any valid state names please enter 1 else 0: ")
         if valid_name == 1:
             show_distinct_states()
-            valid_name = str(input("If you don't know any valid county names please enter 1 else 0: "))
+            valid_name = get_input_as_str("If you don't know any valid county names please enter 1 else 0: ")
         if valid_name == 1:
             show_distinct_counties()
-        state = str(input("Please enter the state:"))
-        county = str(input("Please enter the county:"))
+        state = get_input_as_str("Please enter the state: ")
+        county = get_input_as_str("Please enter the county:" )
     else:
         print("No valid options were selected, returning to main menu")
         return
 
-    annotation = str(input("Please enter the text you'd like to annotate: "))
+    annotation = get_input_as_str("Please enter the text you'd like to annotate: ")
     insert_annotation(state, county, annotation)
 
 
@@ -356,7 +380,27 @@ def get_annotations(state='', county=''):
 def add_user():
     global user_name
     print("Please enter a user name (without spaces) so you can annotate!")
-    user_name = str(input("Please enter your user name: "))
+    user_name = get_input_as_str("Please enter your user name: ")
+
+
+def get_input_as_str(string):
+    ret = get_input(string)
+    if type(ret) == str:
+        return str(ret)
+    else:
+        return -1
+
+
+def get_input_as_int(string):
+    ret = get_input(string)
+    if type(int(ret)) == int:
+        return int(ret)
+    else:
+        return -1
+
+
+def get_input(string):
+    return input(string)
 
 
 if __name__ == '__main__':
