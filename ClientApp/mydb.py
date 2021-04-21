@@ -1,8 +1,8 @@
 from peewee import *
 
 database = MySQLDatabase('project_26', **{'charset': 'utf8', 'sql_mode': 'PIPES_AS_CONCAT', 'use_unicode': True,
-                                          'host': 'marmoset04.shoshin.uwaterloo.ca', 'user': 'm2jha',
-                                          'password': 'Mikethestrom!2'})
+                                          'host': 'marmoset04.shoshin.uwaterloo.ca', 'user': 'user',
+                                          'password': 'password'})
 
 
 class UnknownField(object):
