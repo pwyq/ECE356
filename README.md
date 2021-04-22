@@ -19,9 +19,7 @@ Following instructions are for Linux/macOS.
 > source ./venv/bin/activate
 ```
 
-4. Enter your credentials in `mydb.py`, specifically the `user` and `password` field in the `database` variable.
-
-5.
+4.
 
 ```
 > pip3 install -r requirements.txt
