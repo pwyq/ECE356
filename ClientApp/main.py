@@ -36,7 +36,7 @@ def show_distinct_parties():
 
 def get_county_stats():
     filters = {1: '1) Filter by year (2020 by default)', 2: '2) Filter by county name (all counties by default)',
-               3: '3) Filter by winner party (Democratic Party by default)'}
+               3: '3) Filter by winner party (DEM by default)'}
     year = 2020
     county_name = ''
     winner_party = 'DEM'
@@ -86,7 +86,8 @@ def get_county_stats():
                     my_db.CountyResult.fraction_vote_rep, my_db.CountyResult.fraction_vote_other) \
             .join(my_db.County) \
             .join(my_db.Candidate, on=(my_db.Candidate.id == my_db.CountyResult.winner)) \
-            .where((my_db.CountyResult.year == year) & (my_db.County.name == county_name))
+            .where((my_db.CountyResult.year == year) & (my_db.County.name == county_name) &
+                   (my_db.Candidate.abbreviation == winner_party))
 
     print(tabulate(results.dicts(), headers="keys"))
 
@@ -403,18 +404,20 @@ def add_user():
 
 def get_input_as_str(string):
     ret = get_input(string)
-    if type(ret) == str:
-        return str(ret)
-    else:
+    try:
+        ret = str(ret)
+    except ValueError:
         return -1
+    return ret
 
 
 def get_input_as_int(string):
     ret = get_input(string)
-    if type(int(ret)) == int:
-        return int(ret)
-    else:
+    try:
+        ret = int(ret)
+    except ValueError:
         return -1
+    return ret
 
 
 def get_input(string):
