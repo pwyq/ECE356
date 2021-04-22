@@ -1,8 +1,12 @@
 from peewee import *
+from getpass import getpass
 
+
+user = input("Please enter your username for marmoset04.shoshin.uwaterloo.ca server: ")
+password = getpass()
 database = MySQLDatabase('project_26', **{'charset': 'utf8', 'sql_mode': 'PIPES_AS_CONCAT', 'use_unicode': True,
-                                          'host': 'marmoset04.shoshin.uwaterloo.ca', 'user': 'user',
-                                          'password': 'password'})
+                                          'host': 'marmoset04.shoshin.uwaterloo.ca', 'user': user,
+                                          'password': password})
 
 
 class UnknownField(object):
